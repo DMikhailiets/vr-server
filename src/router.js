@@ -1,4 +1,5 @@
 const WebSocket = require('ws')
+const getFiles = require('./utils/files')
 
 const createRoutes = (app, wss) => {
     app.post("/upload" , async function (req, res, next) {
@@ -10,10 +11,15 @@ const createRoutes = (app, wss) => {
         res.send("Файл загружен")
     })
 
-    app.get('/download', function (req, res, ) {
-        var filePath = __dirname + "/uploads/example.mp4" // Or format the path using the `id` rest param
-        var fileName = "example.mp4" // The default name the browser will use
+    app.get('/download/:id', function (req, res, ) {
+        let fileName = req.params.id // The default name the browser will use
+        let filePath = __dirname + '/../uploads/' + fileName
+        console.log('fileName: ', fileName)
+        console.log('filePath: ', filePath)
         res.download(filePath, fileName)    
+    })
+    app.get('/download', function (req, res, ) {
+        res.send(getFiles())
     })
 }
 
